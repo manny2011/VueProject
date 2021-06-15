@@ -1,0 +1,14 @@
+.row1 {
+  border-bottom: 1px solid #dcdcdc;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+.row1:last-child {
+  border-bottom: none;
+}
+.row1 .row2 {
+  margin-bottom: 10px;
+}
+.row1 .row2:last-child {
+  margin-bottom: 0px;
+}

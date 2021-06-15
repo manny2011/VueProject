@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../components/Home.vue'
+import Home from '../components/home/Home.vue'
 import Login from '../components/Login.vue'
 import Rights from '../components/Rights.vue'
-import Roles from '../components/Roles.vue'
+import Roles from '../components/roles/Roles.vue'
 import Users from '../components/users/Users.vue'
 
 /* eslint-disable */

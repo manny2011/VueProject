@@ -28,7 +28,7 @@
 
 <script>
 /* eslint-disable*/
-import axios from "axios";
+// import axios from "axios";
 export default {
   data() {
     return {
@@ -55,8 +55,8 @@ export default {
           console.log(valid, obj);
           return false
         }
-        axios
-          .post("http://localhost:8888/api/private/v1/login", this.ruleForm)
+        this.$axios
+          .post("login", this.ruleForm)
           .then(res => {
             if (res.data.meta.status === 200) {
               console.log(res);

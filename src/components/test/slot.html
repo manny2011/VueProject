@@ -1,0 +1,57 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      {{message}}
+      <child>
+        <span slot="bottom">this is SLOT</span>
+        <!-- vue 2.6后必须用template这种形式 -->
+        <template slot="top" slot-scope="scope">
+          <h2>second SLOT {{scope.type}}</h2>
+        </template>
+        <span slot="append">搜索</span>
+        <template slot-scope="scope" slot="baozi_slot">
+          <span>{{scope.row.name}}</span>
+        </template>
+      </child>
+    </div>
+    <script src="../../../node_modules/vue/dist/vue.js"></script>
+    <script>
+      Vue.component("child", {
+        //定义插曹名
+        template: `
+        <div>
+          <h1>title</h1>
+          <slot name='top' :type='type'></slot>
+          <slot name='bottom'></slot>
+          <slot name='baozi_slot' :row='row'></slot>
+          <h1>footer1</h1>
+          <div>
+            <slot name='prepend'></slot><input type='text' placeholder='input'> <slot name='append'></slot>
+          </div>
+        </div>
+      `,
+        data() {
+          return {
+            type: "AUDIO",
+            row: {
+              name: "baozi"
+            }
+          };
+        }
+      });
+      var app = new Vue({
+        el: "#app",
+        data: {
+          message: "this is VUE",
+          type: "AUDIO"
+        }
+      });
+    </script>
+  </body>
+</html>
