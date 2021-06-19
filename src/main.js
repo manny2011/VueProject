@@ -36,6 +36,10 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 
+//common
+var ElTreeGrid = require('element-tree-grid');
+Vue.component(ElTreeGrid.name,ElTreeGrid);
+
 router.beforeEach((to, from, next) => {//统一管控路由的地方 Route
   let token = localStorage.getItem('token')
   console.log("token: " + token);

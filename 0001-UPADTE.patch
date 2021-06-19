@@ -1,0 +1,1297 @@
+From 6448ee076a2fc38465e3331ba901356b79e76950 Mon Sep 17 00:00:00 2001
+From: liuxing <itw_liuxx04@tkmail.com>
+Date: Tue, 15 Jun 2021 17:19:49 +0800
+Subject: [PATCH] UPADTE
+
+---
+ src/components/Home.vue         | 109 ----------------------
+ src/components/Login.vue        |   6 +-
+ src/components/Rights.vue       |  58 ++++++++++--
+ src/components/Roles.vue        |  32 -------
+ src/components/home/Home.html   |  53 +++++++++++
+ src/components/home/Home.js     |  44 +++++++++
+ src/components/home/Home.less   |  25 +++++
+ src/components/home/Home.vue    |   5 +
+ src/components/home/home.css    |  23 +++++
+ src/components/roles/Roles.css  |  14 +++
+ src/components/roles/Roles.html |  76 +++++++++++++++
+ src/components/roles/Roles.js   | 117 ++++++++++++++++++++++++
+ src/components/roles/Roles.less |  14 +++
+ src/components/roles/Roles.vue  |   6 ++
+ src/components/test/img.html    |  37 ++++++++
+ src/components/test/slot.html   |  57 ++++++++++++
+ src/components/users/Users.html | 119 +++++++++++++++++++++++-
+ src/components/users/Users.js   | 198 +++++++++++++++++++++++++++++++++++-----
+ src/main.js                     |  28 +++++-
+ src/router/index.js             |   4 +-
+ 20 files changed, 841 insertions(+), 184 deletions(-)
+ delete mode 100644 src/components/Home.vue
+ delete mode 100644 src/components/Roles.vue
+ create mode 100644 src/components/home/Home.html
+ create mode 100644 src/components/home/Home.js
+ create mode 100644 src/components/home/Home.less
+ create mode 100644 src/components/home/Home.vue
+ create mode 100644 src/components/home/home.css
+ create mode 100644 src/components/roles/Roles.css
+ create mode 100644 src/components/roles/Roles.html
+ create mode 100644 src/components/roles/Roles.js
+ create mode 100644 src/components/roles/Roles.less
+ create mode 100644 src/components/roles/Roles.vue
+ create mode 100644 src/components/test/img.html
+ create mode 100644 src/components/test/slot.html
+
+diff --git a/src/components/Home.vue b/src/components/Home.vue
+deleted file mode 100644
+index c1aa204..0000000
+--- a/src/components/Home.vue
++++ /dev/null
+@@ -1,109 +0,0 @@
+-<template>
+-  <el-container class="top-container">
+-    <el-header>
+-      <el-row>
+-        <el-col :span="8">
+-          <img src="../assets/logo.png" />
+-        </el-col>
+-        <el-col :span="8">
+-          <h1>电商后台管理平台</h1>
+-        </el-col>
+-        <el-col :span="8">
+-          <div class="right">
+-            <span>右边是个很重要的地方</span>
+-            <a class="logout" @click.prevent="logout">退出</a>
+-          </div>
+-        </el-col>
+-      </el-row>
+-    </el-header>
+-    <el-container>
+-      <el-aside width="200px">
+-        <el-menu
+-          default-active="2"
+-          class="el-menu-vertical-demo"
+-          @open="handleOpen"
+-          @close="handleClose"
+-          background-color="#545c64"
+-          text-color="#fff"
+-          active-text-color="#ffd04b"
+-          :router="true"
+-        >
+-          <el-submenu index="1">
+-            <template slot="title">
+-              <i class="el-icon-location"></i>
+-              <span>用户管理</span>
+-            </template>
+-            <el-menu-item index="users">用户列表</el-menu-item>
+-          </el-submenu>
+-          <el-submenu index="2">
+-            <template slot="title">
+-              <i class="el-icon-location"></i>
+-              <span>权限管理</span>
+-            </template>
+-            <el-menu-item index="roles">角色列表</el-menu-item>
+-            <el-menu-item index="rights">权限列表</el-menu-item>
+-          </el-submenu>
+-        </el-menu>
+-      </el-aside>
+-      <el-main>
+-        <router-view></router-view>
+-      </el-main>
+-    </el-container>
+-  </el-container>
+-</template>
+-
+-<script>
+-/* eslint-disable*/
+-export default {
+-  methods: {
+-    async logout() {
+-      try {
+-        await this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+-          confirmButtonText: "确定",
+-          cancelButtonText: "取消",
+-          type: "warning"
+-        });
+-        localStorage.removeItem("token"); //退出时清除token
+-        this.$message({
+-          type: "success",
+-          message: "退出成功!"
+-        });
+-        this.$router.replace({ name: "login" });
+-      } catch (err) {
+-        this.$message({
+-          type: "info",
+-          message: "已取消退出"
+-        });
+-      }
+-    }
+-  }
+-};
+-</script>
+-<!-- scoped 原理 添加了一个属性 唯一值-->
+-<style lang="less" scoped>
+-.top-container {
+-  height: 100%;
+-  .el-row {
+-    h1 {
+-      height: 60px;
+-      line-height: 60px;
+-      text-align: center;
+-    }
+-    .right {
+-      height: 60px;
+-      line-height: 60px;
+-      text-align: right;
+-      padding-right: 30px;
+-      a {
+-        color: green;
+-      }
+-    }
+-  }
+-}
+-.el-aside {
+-  background: #40a2c9;
+-}
+-.el-main {
+-  background: #fff;
+-}
+-</style>
+diff --git a/src/components/Login.vue b/src/components/Login.vue
+index d72410d..9a5118b 100644
+--- a/src/components/Login.vue
++++ b/src/components/Login.vue
+@@ -28,7 +28,7 @@
+ 
+ <script>
+ /* eslint-disable*/
+-import axios from "axios";
++// import axios from "axios";
+ export default {
+   data() {
+     return {
+@@ -55,8 +55,8 @@ export default {
+           console.log(valid, obj);
+           return false
+         }
+-        axios
+-          .post("http://localhost:8888/api/private/v1/login", this.ruleForm)
++        this.$axios
++          .post("login", this.ruleForm)
+           .then(res => {
+             if (res.data.meta.status === 200) {
+               console.log(res);
+diff --git a/src/components/Rights.vue b/src/components/Rights.vue
+index 5d60656..de7473f 100644
+--- a/src/components/Rights.vue
++++ b/src/components/Rights.vue
+@@ -1,19 +1,61 @@
+ <template>
+-  <div>Rights</div>
++  <div>
++    <el-table :data="tableData" style="width: 100%">
++      <el-table-column
++        prop="id"
++        label="#"
++        width="180"
++        type="index"
++        :index="generateIndex"
++      >
++      </el-table-column>
++      <el-table-column prop="authName" label="权限名称" width="180">
++      </el-table-column>
++      <el-table-column prop="path" label="路径" width="180"> </el-table-column>
++      <el-table-column prop="level" label="等级">
++        <!-- 条件渲染 -->
++        <template slot-scope="scope">
++          <span v-if="scope.row.level == 0">一级</span>
++          <span v-else-if="scope.row.level == 1">二级</span>
++          <span v-else-if="scope.row.level == 2">三级</span>
++        </template>
++      </el-table-column>
++    </el-table>
++  </div>
+ </template>
+ 
+ <script>
+ export default {
+-  name: 'HelloWorld',
+-  data () {
++  name: "HelloWorld",
++  created() {
++    this.getData();
++  },
++  data() {
+     return {
+-      msg: 'Welcome to Your Vue.js App'
++      msg: "Welcome to Your Vue.js App",
++      tableData: []
++    };
++  },
++  methods: {
++    async getData() {
++      let res = await this.$axios.get("rights/list");
++      console.log(res);
++      if (res.data.meta.status === 200) {
++        this.tableData = res.data.data;
++      } else {
++        this.$message({
++          message: res.data.meta.msg,
++          type: "error"
++        });
++      }
++    },
++    generateIndex(index) {
++      //自定义索引号
++      return index + 1;
+     }
+   }
+-}
++};
+ </script>
+ 
+ <!-- Add "scoped" attribute to limit CSS to this component only -->
+-<style scoped>
+-
+-</style>
++<style scoped></style>
+diff --git a/src/components/Roles.vue b/src/components/Roles.vue
+deleted file mode 100644
+index 6ab9f58..0000000
+--- a/src/components/Roles.vue
++++ /dev/null
+@@ -1,32 +0,0 @@
+-<template>
+-  <div>Roles</div>
+-</template>
+-
+-<script>
+-export default {
+-  name: 'HelloWorld',
+-  data () {
+-    return {
+-      msg: 'Welcome to Your Vue.js App'
+-    }
+-  }
+-}
+-</script>
+-
+-<!-- Add "scoped" attribute to limit CSS to this component only -->
+-<style scoped>
+-h1, h2 {
+-  font-weight: normal;
+-}
+-ul {
+-  list-style-type: none;
+-  padding: 0;
+-}
+-li {
+-  display: inline-block;
+-  margin: 0 10px;
+-}
+-a {
+-  color: #42b983;
+-}
+-</style>
+diff --git a/src/components/home/Home.html b/src/components/home/Home.html
+new file mode 100644
+index 0000000..121c8dd
+--- /dev/null
++++ b/src/components/home/Home.html
+@@ -0,0 +1,53 @@
++<el-container class="top-container">
++  <el-header>
++    <el-row>
++      <el-col :span="8">
++        <img src="../../assets/logo.png" />
++      </el-col>
++      <el-col :span="8">
++        <h1>电商后台管理平台</h1>
++      </el-col>
++      <el-col :span="8">
++        <div class="right">
++          <span>右边是个很重要的地方</span>
++          <a class="logout" @click.prevent="logout">退出</a>
++        </div>
++      </el-col>
++    </el-row>
++  </el-header>
++  <el-container>
++    <el-aside width="200px">
++      <el-menu
++        default-active="handleRoute"
++        class="el-menu-vertical-demo"
++        @open="handleOpen"
++        @close="handleClose"
++        background-color="#545c64"
++        text-color="#fff"
++        active-text-color="#ffd04b"
++        :router="true"
++      >
++        <el-submenu v-for="item in menuData" :key="item.id" :index="item.id">
++          <template slot="title">
++            <i class="el-icon-location"></i>
++            <span>{{item.authName}}</span>
++          </template>
++          <el-menu-item v-for="item1 in item.children" :index="item1.path" :key='item1.id'
++            >{{item1.authName}}</el-menu-item
++          >
++        </el-submenu>
++        <!-- <el-submenu index="2">
++          <template slot="title">
++            <i class="el-icon-location"></i>
++            <span>权限管理</span>
++          </template>
++          <el-menu-item index="roles">角色列表</el-menu-item>
++          <el-menu-item index="rights">权限列表</el-menu-item>
++        </el-submenu> -->
++      </el-menu>
++    </el-aside>
++    <el-main>
++      <router-view></router-view>
++    </el-main>
++  </el-container>
++</el-container>
+diff --git a/src/components/home/Home.js b/src/components/home/Home.js
+new file mode 100644
+index 0000000..cfc1902
+--- /dev/null
++++ b/src/components/home/Home.js
+@@ -0,0 +1,44 @@
++
++/* eslint-disable*/
++export default {
++  created() {
++    this.getMenus()
++    this.handleRoute()
++  },
++  data() {
++    return {
++      menuData: []
++    }
++  },
++  methods: {
++    async logout() {
++      try {
++        await this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
++          confirmButtonText: "确定",
++          cancelButtonText: "取消",
++          type: "warning"
++        });
++        localStorage.removeItem("token"); //退出时清除token
++        this.$message({
++          type: "success",
++          message: "退出成功!"
++        });
++        this.$router.replace({ name: "login" });
++      } catch (err) {
++        this.$message({
++          type: "info",
++          message: "已取消退出"
++        });
++      }
++    },
++    async getMenus() {
++      let res = await this.$axios.get('menus')
++      console.log(res);
++      this.menuData = res.data.data
++    },
++    handleRoute(){
++      //slice() 方法可从已有的数组中返回选定的元素
++      return this.$router.path.slice(1)
++    }
++  }
++};
+diff --git a/src/components/home/Home.less b/src/components/home/Home.less
+new file mode 100644
+index 0000000..bdfbbc6
+--- /dev/null
++++ b/src/components/home/Home.less
+@@ -0,0 +1,25 @@
++.top-container {
++  height: 100%;
++  .el-row {
++    h1 {
++      height: 60px;
++      line-height: 60px;
++      text-align: center;
++    }
++    .right {
++      height: 60px;
++      line-height: 60px;
++      text-align: right;
++      padding-right: 30px;
++      a {
++        color: green;
++      }
++    }
++  }
++}
++.el-aside {
++  background: #40a2c9;
++}
++.el-main {
++  background: #fff;
++}
+diff --git a/src/components/home/Home.vue b/src/components/home/Home.vue
+new file mode 100644
+index 0000000..91180c7
+--- /dev/null
++++ b/src/components/home/Home.vue
+@@ -0,0 +1,5 @@
++<template src="./Home.html"> </template>
++
++<script src="./Home.js"></script>
++<!-- scoped 原理 添加了一个属性 唯一值-->
++<style src="./Home.less" lang="less" scoped ></style>
+diff --git a/src/components/home/home.css b/src/components/home/home.css
+new file mode 100644
+index 0000000..5aa90a0
+--- /dev/null
++++ b/src/components/home/home.css
+@@ -0,0 +1,23 @@
++.top-container {
++  height: 100%;
++}
++.top-container .el-row h1 {
++  height: 60px;
++  line-height: 60px;
++  text-align: center;
++}
++.top-container .el-row .right {
++  height: 60px;
++  line-height: 60px;
++  text-align: right;
++  padding-right: 30px;
++}
++.top-container .el-row .right a {
++  color: green;
++}
++.el-aside {
++  background: #40a2c9;
++}
++.el-main {
++  background: #fff;
++}
+diff --git a/src/components/roles/Roles.css b/src/components/roles/Roles.css
+new file mode 100644
+index 0000000..492ef8e
+--- /dev/null
++++ b/src/components/roles/Roles.css
+@@ -0,0 +1,14 @@
++.row1 {
++  border-bottom: 1px solid #dcdcdc;
++  margin-bottom: 20px;
++  padding-bottom: 20px;
++}
++.row1:last-child {
++  border-bottom: none;
++}
++.row1 .row2 {
++  margin-bottom: 10px;
++}
++.row1 .row2:last-child {
++  margin-bottom: 0px;
++}
+diff --git a/src/components/roles/Roles.html b/src/components/roles/Roles.html
+new file mode 100644
+index 0000000..5bbf022
+--- /dev/null
++++ b/src/components/roles/Roles.html
+@@ -0,0 +1,76 @@
++<div>
++  <el-table :data="tableData" style="width: 100%">
++    <el-table-column type="expand">
++      <template slot-scope="props">
++        <el-row class="row1" v-for="item in props.row.children">
++          <el-col :span="4">
++            <el-tag closable color="blue">{{item.authName}}</el-tag>
++            <!-- <el-button icon="el-icon-arrow-right" size='mini'></el-button> -->
++            <i class="el-icon-arrow-right"></i>
++          </el-col>
++          <el-col :span="20">
++            <el-row class="row2" v-for="item1 in item.children">
++              <el-col :span="4">
++                <el-tag closable color="red">{{item1.authName}}</el-tag>
++              </el-col>
++              <el-col :span="20">
++                <span v-for="item2 in item1.children">
++                  <el-tag closable color="yellow">{{item2.authName}}</el-tag>
++                </span>
++              </el-col>
++            </el-row>
++          </el-col>
++        </el-row>
++      </template>
++    </el-table-column>
++    <el-table-column type="index" label="序号" width="180" :index="1">
++    </el-table-column>
++    <el-table-column prop="roleName" label="角色名称" width="180">
++    </el-table-column>
++    <el-table-column prop="roleDesc" label="描述" width="180">
++    </el-table-column>
++    <el-table-column prop="children" label="操作">
++      <template slot-scope="scope">
++        <el-button
++          type="primary"
++          icon="el-icon-edit"
++          plain
++          size="mini"
++        ></el-button>
++        <el-button
++          type="danger"
++          icon="el-icon-delete"
++          plain
++          size="mini"
++        ></el-button>
++        <el-button
++          type="success"
++          icon="el-icon-check"
++          size="mini"
++          @click="showRevisePermissions(scope.row)"
++          >分配权限</el-button
++        >
++      </template>
++    </el-table-column>
++  </el-table>
++
++  <el-dialog title="角色授权" :visible.sync="permissionDialogVisible" @close='closeDialog'>
++    <el-tree
++      ref="tree"
++      :data="data"
++      show-checkbox
++      node-key="id"
++      :default-expanded-keys="[2, 3]"
++      :default-checked-keys="[5,6]"
++      :props="defaultProps"
++    >
++    </el-tree>
++
++    <div slot="footer" class="dialog-footer">
++      <el-button @click="closeDialog">取 消</el-button>
++      <el-button type="primary" @click="assignPermission"
++        >确 定</el-button
++      >
++    </div>
++  </el-dialog>
++</div>
+diff --git a/src/components/roles/Roles.js b/src/components/roles/Roles.js
+new file mode 100644
+index 0000000..25d63b2
+--- /dev/null
++++ b/src/components/roles/Roles.js
+@@ -0,0 +1,117 @@
++export default {
++  created() {
++    this.getData()
++    this.getAllRightsData()
++  },
++  data() {
++    return {
++      msg: "Welcome to Your Vue.js App",
++      permissionDialogVisible: false,
++      tableData: [
++
++      ],
++      form: {
++
++      },
++      data: [{
++        id: 1,
++        label: '一级 1',
++        children: [{
++          id: 4,
++          label: '二级 1-1',
++          children: [{
++            id: 9,
++            label: '三级 1-1-1'
++          }, {
++            id: 10,
++            label: '三级 1-1-2'
++          }]
++        }]
++      }, {
++        id: 2,
++        label: '一级 2',
++        children: [{
++          id: 5,
++          label: '二级 2-1'
++        }, {
++          id: 6,
++          label: '二级 2-2'
++        }]
++      }, {
++        id: 3,
++        label: '一级 3',
++        children: [{
++          id: 7,
++          label: '二级 3-1'
++        }, {
++          id: 8,
++          label: '二级 3-2'
++        }]
++      }],
++      defaultProps: {
++        children: 'children',
++        label: 'authName'
++      }
++    };
++  },
++  methods: {
++    async getData() {
++      let res = await this.$axios.get('roles')
++      if (res.data.meta.status === 200) {
++        this.tableData = res.data.data
++      }
++      console.log(res);
++    },
++    async getAllRightsData() {
++      let res = await this.$axios.get('rights/tree')
++      if (res.data.meta.status === 200) {
++        this.data = res.data.data
++      }
++      console.log(res);
++    },
++    showRevisePermissions(row) {
++      console.log('Permission dialog', row)
++      this.roleId = row.id
++      this.permissionDialogVisible = true
++      let checkedArr = []
++      row.children.forEach(item1 => {
++        item1.children.forEach(item2 => {
++          item2.children.forEach(item3 => {
++            console.log(item3);
++            checkedArr.push(item3.id)
++          })
++        })
++      })
++      console.log(checkedArr);
++      // this.$refs['tree'].setCheckedNodes(checkedArr)
++      this.$nextTick(() => {
++        this.$refs.tree.setCheckedKeys(checkedArr)
++      })
++    },
++    async assignPermission() {
++      let checkKeys = this.$refs.tree.getCheckedKeys()
++      let halfCheckKeys = this.$refs.tree.getHalfCheckedKeys()
++      let res = await this.$axios.post(`roles/${this.roleId}/rights`, {
++        rids: checkKeys.join(','),
++      })
++      console.log(res);
++      if (res.data.meta.status === 200) {
++        this.permissionDialogVisible = false
++        this.$refs.tree.setCheckedKeys([])//清空选中
++        this.$message({
++          message: res.data.meta.msg,
++          type: 'success'
++        })
++      } else {
++        this.$message({
++          type: 'error',
++          message: res.data.meta.msg
++        })
++      }
++    },
++    closeDialog() {
++      this.permissionDialogVisible = false
++      this.$refs.tree.setCheckedKeys([])//清空
++    }
++  }
++};
+diff --git a/src/components/roles/Roles.less b/src/components/roles/Roles.less
+new file mode 100644
+index 0000000..41a6e87
+--- /dev/null
++++ b/src/components/roles/Roles.less
+@@ -0,0 +1,14 @@
++.row1{
++  border-bottom: 1px solid #dcdcdc;
++  margin-bottom: 20px;
++  padding-bottom: 20px;
++  &:last-child{
++    border-bottom: none;
++  }
++  .row2{
++    margin-bottom: 10px;
++    &:last-child{
++      margin-bottom: 0px;
++    }
++  }
++}
+diff --git a/src/components/roles/Roles.vue b/src/components/roles/Roles.vue
+new file mode 100644
+index 0000000..850d44d
+--- /dev/null
++++ b/src/components/roles/Roles.vue
+@@ -0,0 +1,6 @@
++<template src="./Roles.html"> </template>
++
++<script src="./Roles.js"></script>
++
++<!-- Add "scoped" attribute to limit CSS to this component only -->
++<style scoped lang="less" src="./Roles.less"></style>
+diff --git a/src/components/test/img.html b/src/components/test/img.html
+new file mode 100644
+index 0000000..6d09a34
+--- /dev/null
++++ b/src/components/test/img.html
+@@ -0,0 +1,37 @@
++<html lang="en">
++  <head>
++    <meta charset="UTF-8" />
++    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Document</title>
++    <script src="../../../node_modules/vue/dist/vue.js"></script>
++    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
++    <link
++      rel="stylesheet"
++      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
++    />
++  </head>
++  <body>
++    <div id="app">
++      <el-image v-for="url in urls" :src="url"></el-image>
++    </div>
++    <script>
++      const vm = new Vue({
++        el: "#app",
++        data() {
++          return {
++            urls: [
++              "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
++              "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
++              "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
++              "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
++              "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
++              "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
++              "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg"
++            ]
++          };
++        }
++      });
++    </script>
++  </body>
++</html>
+diff --git a/src/components/test/slot.html b/src/components/test/slot.html
+new file mode 100644
+index 0000000..40f462a
+--- /dev/null
++++ b/src/components/test/slot.html
+@@ -0,0 +1,57 @@
++<html lang="en">
++  <head>
++    <meta charset="UTF-8" />
++    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Document</title>
++  </head>
++  <body>
++    <div id="app">
++      {{message}}
++      <child>
++        <span slot="bottom">this is SLOT</span>
++        <!-- vue 2.6后必须用template这种形式 -->
++        <template slot="top" slot-scope="scope">
++          <h2>second SLOT {{scope.type}}</h2>
++        </template>
++        <span slot="append">搜索</span>
++        <template slot-scope="scope" slot="baozi_slot">
++          <span>{{scope.row.name}}</span>
++        </template>
++      </child>
++    </div>
++    <script src="../../../node_modules/vue/dist/vue.js"></script>
++    <script>
++      Vue.component("child", {
++        //定义插曹名
++        template: `
++        <div>
++          <h1>title</h1>
++          <slot name='top' :type='type'></slot>
++          <slot name='bottom'></slot>
++          <slot name='baozi_slot' :row='row'></slot>
++          <h1>footer1</h1>
++          <div>
++            <slot name='prepend'></slot><input type='text' placeholder='input'> <slot name='append'></slot>
++          </div>
++        </div>
++      `,
++        data() {
++          return {
++            type: "AUDIO",
++            row: {
++              name: "baozi"
++            }
++          };
++        }
++      });
++      var app = new Vue({
++        el: "#app",
++        data: {
++          message: "this is VUE",
++          type: "AUDIO"
++        }
++      });
++    </script>
++  </body>
++</html>
+diff --git a/src/components/users/Users.html b/src/components/users/Users.html
+index 548a47b..be1cbbe 100644
+--- a/src/components/users/Users.html
++++ b/src/components/users/Users.html
+@@ -33,6 +33,44 @@
+     </el-table-column>
+     <el-table-column prop="email" label="邮箱" width="180"> </el-table-column>
+     <el-table-column prop="mobile" label="电话"> </el-table-column>
++
++    <el-table-column label="用户状态">
++      <!-- 必须 使用template -->
++      <template slot-scope="scope">
++        <el-switch
++          v-model="scope.row.mg_state"
++          active-color="#13ce66"
++          inactive-color="#ff4949"
++          @change="stateChanged(scope.row)"
++        >
++        </el-switch>
++      </template>
++    </el-table-column>
++    <el-table-column label="操作">
++      <template slot-scope="scope">
++        <el-button
++          plain
++          type="primary"
++          size="mini"
++          icon="el-icon-edit"
++          @click="editUser(scope.row)"
++        ></el-button>
++        <el-button
++          circle
++          size="mini"
++          type="danger"
++          icon="el-icon-delete"
++          @click="delUser(scope.row)"
++        ></el-button>
++        <el-button
++          size="mini"
++          type="danger"
++          icon="el-icon-check"
++          @click="assignRole(scope.row)"
++          >分配角色</el-button
++        >
++      </template>
++    </el-table-column>
+   </el-table>
+   <el-pagination
+     background
+@@ -44,18 +82,27 @@
+   >
+   </el-pagination>
+   <!-- 对话框 -->
+-  <el-dialog title="添加用户" :visible.sync="addUserDialogVisible">
+-    <el-form :model="addUserForm" :rules="rules" label-width="80px" ref='addUserForm'>
++  <el-dialog
++    title="添加用户"
++    :visible.sync="addUserDialogVisible"
++    @close="closeAddDialog('addUserForm')"
++  >
++    <el-form
++      :model="addUserForm"
++      :rules="rules"
++      label-width="80px"
++      ref="addUserForm"
++    >
+       <el-form-item label="用户名" prop="username">
+         <el-input v-model="addUserForm.username" autocomplete="off"></el-input>
+       </el-form-item>
+       <el-form-item label="密码" prop="password">
+         <el-input v-model="addUserForm.password" autocomplete="off"></el-input>
+       </el-form-item>
+-      <el-form-item label="邮箱" prop='email'>
++      <el-form-item label="邮箱" prop="email">
+         <el-input v-model="addUserForm.email" autocomplete="off"></el-input>
+       </el-form-item>
+-      <el-form-item label="手机" prop='mobile'>
++      <el-form-item label="手机" prop="mobile">
+         <el-input v-model="addUserForm.mobile" autocomplete="off"></el-input>
+       </el-form-item>
+     </el-form>
+@@ -66,4 +113,68 @@
+       >
+     </div>
+   </el-dialog>
++  <!-- 编辑用户对话框 -->
++  <el-dialog
++    title="编辑用户"
++    :visible.sync="editUserDialogVisible"
++    @close="closeEditDialog('editUserForm')"
++  >
++    <el-form
++      :model="editUserForm"
++      label-width="80px"
++      ref="editUserForm"
++      :rules="editUserFormRules"
++    >
++      <el-form-item label="用户名">
++        <!-- <el-input v-model="form.name"></el-input> -->
++        <el-tag>{{editUserForm.username}}</el-tag>
++      </el-form-item>
++      <el-form-item label="邮箱">
++        <el-input v-model="editUserForm.email"></el-input>
++      </el-form-item>
++      <el-form-item label="手机">
++        <el-input v-model="editUserForm.mobile"></el-input>
++      </el-form-item>
++    </el-form>
++    <div slot="footer" class="dialog-footer">
++      <el-button @click="cancelEditUser">取 消</el-button>
++      <el-button type="primary" @click="confirmEditUser('editUserForm')"
++        >确 定</el-button
++      >
++    </div>
++  </el-dialog>
++  <!-- 分配角色对话框 -->
++  <el-dialog
++    title="分配角色"
++    :visible.sync="assignRoleDialogVisible"
++    @close="closeEditDialog('asignRoleForm')"
++  >
++    <el-form
++      :model="asignRoleForm"
++      label-width="80px"
++      ref="asignRoleForm"
++      :rules="editUserFormRules"
++    >
++      <el-form-item label="用户名">
++        <!-- <el-input v-model="form.name"></el-input> -->
++        <el-tag>{{asignRoleForm.username}}</el-tag>
++      </el-form-item>
++
++      <el-form-item label="角色" prop="region">
++        <el-select v-model="asignRoleForm.role_id" placeholder="请选择角色">
++          <!-- :其实是v-bind，动态绑定属性值 -->
++          <el-option
++            v-for="item in roleData"
++            :key="item.id"
++            :label="item.roleName"
++            :value="item.id"
++          ></el-option>
++        </el-select>
++      </el-form-item>
++    </el-form>
++    <div slot="footer" class="dialog-footer">
++      <el-button @click="closeEditDialog('asignRoleForm')">取 消</el-button>
++      <el-button type="primary" @click="confirmAsignRole">确 定</el-button>
++    </div>
++  </el-dialog>
+ </div>
+diff --git a/src/components/users/Users.js b/src/components/users/Users.js
+index 399a98d..f9a1fb0 100644
+--- a/src/components/users/Users.js
++++ b/src/components/users/Users.js
+@@ -1,8 +1,10 @@
+ 
+-import axios from "axios";
+-
+ export default {
+   name: "HelloWorld",
++  created() {
++    this.getData();
++    this.getRolesData()
++  },
+   data() {
+     return {
+       tableData: [],
+@@ -11,12 +13,21 @@ export default {
+       pageSize: 1,
+       searchText: "",
+       addUserDialogVisible: false,
++      editUserDialogVisible: false,
++      assignRoleDialogVisible: false,
+       addUserForm: {
+         username: '',
+         password: '',
+         email: '',
+         mobile: '',
+       },
++      editUserForm: {
++        name: 'baozi',
++        email: 'xxx@11.com',
++        mobile: '18888888888'
++      },
++      asignRoleForm: {
++      },
+       rules: {
+         username: [
+           { required: true, message: '请输入活动名称', trigger: 'blur' },
+@@ -35,7 +46,11 @@ export default {
+             trigger: 'blur',
+           }
+         ]
+-      }
++      },
++      editUserFormRules: {
++
++      },
++      roleData: []
+     };
+   },
+   methods: {
+@@ -44,24 +59,27 @@ export default {
+       this.getData(current); //this表示当前 vue对象
+     },
+     async getData(currentPage = 1) {
+-      //默认参数
+-      let res = await axios
+-        .get("http://localhost:8888/api/private/v1/users", {
+-          params: {
+-            query: this.searchText,
+-            pagenum: currentPage,
+-            pagesize: this.pageSize
+-          },
+-          headers: {
+-            Authorization: localStorage.getItem("token")
+-          }
+-        })
+-      console.log(res);
+-      console.log(res.data.data.users);
+-      this.tableData = res.data.data.users;
+-      this.total = res.data.data.total;
+-      this.currentPage = res.data.data.pagenum;
+-
++      try {
++        //默认参数
++        let res = await this.$axios
++          .get("users", {
++            params: {
++              query: this.searchText,
++              pagenum: currentPage,
++              pagesize: this.pageSize
++            },
++            headers: {
++              Authorization: localStorage.getItem("token")
++            }
++          })
++        console.log(res);
++        console.log(res.data.data.users);
++        this.tableData = res.data.data.users;
++        this.total = res.data.data.total;
++        this.currentPage = res.data.data.pagenum;
++      } catch (err) {
++        console.log(err);
++      }
+     },
+     addNewUser() {
+       console.log("addNewUser");
+@@ -95,14 +113,144 @@ export default {
+         }
+       })
+     },
++    async delUser(row) {
++      console.log('delUser', row);
++      const { id } = row;
++      try {//确认
++        await this.$confirm("此操作将删除用户，是否继续？", "提示", {
++          confirmButtonText: '确定',
++          cancelButtonText: '取消',
++          type: 'info',
++        });
++        let res = await this.$axios.delete(`users/${id}`, {
++          headers: {
++            Authorization: localStorage.getItem('token')
++          }
++        })
++        console.log(res);
++        if (res.data.meta.status === 200) {
++          this.$message({
++            type: 'info',
++            message: res.data.meta.msg,
++          })
++          this.getData()
++        } else {
++          this.$message({
++            type: 'error',
++            message: res.data.meta.msg,
++          })
++        }
++
++      } catch (err) {//取消
++        this.$message({
++          type: 'info',
++          message: '取消删除'
++        })
++      }
++
++
++    },
++    async stateChanged(row) {
++      const { id, mg_state } = row;
++      try {
++        let res = await this.$axios.put(`users/${id}/state/${mg_state}`, null, {
++          headers: {
++            Authorization: localStorage.getItem('token'),
++          }
++        })
++        console.log(res);
++      } catch (err) {
++        console.log(err);
++        row.mg_state = !row.mg_state
++      }
++
++    },
++    async getRolesData() {
++      let res = await this.$axios.get('roles')
++      console.log(res);
++      if (res.data.meta.status === 200) {
++        this.roleData = res.data.data
++      } else {
++
++      }
++      this.$message({
++        message: res.data.meta.msg,
++      })
++    },
++    editUser(row) {
++      console.log(row);
++      this.editUserForm = row
++      this.editUserDialogVisible = true
++    },
++    cancelEditUser() {
++      console.log('cancel');
++      this.editUserForm = {}
++      this.editUserDialogVisible = false
++    },
++    confirmEditUser(formName) {
++      console.log('confirm');
++      this.$refs[formName].validate(async valid => {
++        if (valid) {
++          const { email, mobile, id } = this.editUserForm
++          let res = await this.$axios.put(`users/${id}`, {
++            email,
++            mobile
++          })
++          if (res.data.meta.status == 200) {
++            this.editUserForm = {}
++            this.editUserDialogVisible = false
++            this.$refs[formName].resetFields()
++            this.getData(this.currentPage)
++          } else {
++            this.$message({
++              message: res.data.meta.msg,
++              type: 'error'
++            })
++          }
++        } else {
++          this.$message.error('数据格式不正确！')
++        }
++      })
++
++    },
++    closeAddDialog(formName) {
++      this.$refs[formName].resetFields()
++    },
++    closeEditDialog(formName) {
++      this.$refs[formName].resetFields()
++    },
++    async assignRole(row) {
++      console.log(row);
++      const { id } = row
++      let res = await this.$axios.get(`users/${id}`)
++      console.log(res);
++      const { rid, username } = res.data.data
++      this.asignRoleForm.id = id
++      this.asignRoleForm.username = username
++      this.asignRoleForm.role_id = rid
++
++      this.assignRoleDialogVisible = true
++
++    },
++    async confirmAsignRole() {
++      const { id, role_id } = this.asignRoleForm
++      let res = await this.$axios.put(`users/${id}/role`, {
++        rid: role_id
++      })
++      if (res.data.meta.status === 200) {
++        this.assignRoleDialogVisible = false
++        this.$message({
++          type:'success',
++          msg:'分配角色成功!'
++        })
++      }
++      console.log(res);
++    }
+   },
+   computed: {
+     // total: function() {
+     // return this.tableData.length; //数组长度
+     // }
+   },
+-  created() {
+-    this.getData();
+-  },
+-  mounted() { }
++
+ };
+diff --git a/src/main.js b/src/main.js
+index 0cf5099..a1e1601 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -6,13 +6,39 @@ import router from './router'
+ import ElementUI from 'element-ui'
+ import 'element-ui/lib/theme-chalk/index.css'
+ import './assets/common.css'
++import axios from 'axios'
++
++//1.全局配置
++axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'//baseURL
++//2.全局引入
++Vue.prototype.$axios = axios//加到原型对象上
++//3.添加全局请求头
++axios.interceptors.request.use(config => {
++  config.headers.Authorization = localStorage.getItem('token')
++  return config
++}, err => {
++  console.log(err);//do sth.
++  return Promise.reject(err)
++})
++//4.响应拦截器/ 统一处理token失效问题
++axios.interceptors.response.use(function (response) {
++  console.log("response: correct->", response);
++  if (response.data.meta.status === 401) {
++    router.push({ name: 'login' })
++  }
++  return response
++}, function (err) {
++  console.log("response: err->", err);
++  return Promise.reject(err)
++})
+ 
+ Vue.config.productionTip = false
+ 
+ Vue.use(ElementUI)
+ 
+-router.beforeEach((to, from, next) => {//统一管控路由的地方 Route 
++router.beforeEach((to, from, next) => {//统一管控路由的地方 Route
+   let token = localStorage.getItem('token')
++  console.log("token: " + token);
+   if (token || to.name === 'login') {
+     next()
+   } else {
+diff --git a/src/router/index.js b/src/router/index.js
+index b3ff34c..6718791 100644
+--- a/src/router/index.js
++++ b/src/router/index.js
+@@ -1,9 +1,9 @@
+ import Vue from 'vue'
+ import Router from 'vue-router'
+-import Home from '../components/Home.vue'
++import Home from '../components/home/Home.vue'
+ import Login from '../components/Login.vue'
+ import Rights from '../components/Rights.vue'
+-import Roles from '../components/Roles.vue'
++import Roles from '../components/roles/Roles.vue'
+ import Users from '../components/users/Users.vue'
+ 
+ /* eslint-disable */
+-- 
+2.12.0.windows.1
+

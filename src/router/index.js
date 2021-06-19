@@ -5,6 +5,9 @@ import Login from '../components/Login.vue'
 import Rights from '../components/Rights.vue'
 import Roles from '../components/roles/Roles.vue'
 import Users from '../components/users/Users.vue'
+import Categories from '../components/Categories.vue'
+import Goods from '../components/goods/goods.vue'
+import addGood from '../components/goods/addGood.vue'
 
 /* eslint-disable */
 //eslint-disable-next-line
@@ -38,6 +41,21 @@ export default new Router({
           path: '/rights',
           name: 'rights',
           component: Rights,
+        },
+        {
+          path:'/categories',
+          name:'categories',
+          component:Categories,
+        },
+        {
+          path:'/goods',
+          name:'goods',
+          component:Goods,
+        },
+        {
+          path:'/addGood',
+          name:'addGood',
+          component:addGood
         }
       ]
     },
