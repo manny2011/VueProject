@@ -1,17 +1,5 @@
-<template>
-  <div>add Good</div>
-</template>
+<template src="./addGood.html"> </template>
 
-<script>
-export default {
-  data () {
-    return {
-      
-    }
-  }
-}
-</script>
+<script src="./addGood.js"></script>
 
-<style>
-
-</style>
+<style src="./addGood.less" lang="less" scoped></style>
